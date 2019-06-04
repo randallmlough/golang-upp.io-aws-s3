@@ -1,0 +1,56 @@
+{{ define "main"}}
+    <!doctype html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>Golang Server with UPPY AWS s3 Support</title>
+        <link href="https://transloadit.edgly.net/releases/uppy/v1.0.0/uppy.min.css" rel="stylesheet">
+    </head>
+    <body>
+    <div id="drag-drop-area"></div>
+
+    <script src="https://transloadit.edgly.net/releases/uppy/v1.0.0/uppy.min.js"></script>
+    <script>
+        var uppy = Uppy.Core()
+        uppy.use(Uppy.Dashboard, {
+            inline: true,
+            target: '#drag-drop-area'
+        })
+        uppy.use(Uppy.AwsS3, {
+            getUploadParameters (file) {
+                // Send a request to our PHP signing endpoint.
+                return fetch('/sign', {
+                    method: 'post',
+                    // Send and receive JSON.
+                    headers: {
+                        accept: 'application/json',
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        filename: file.name,
+                        contentType: file.type
+                    })
+                }).then((response) => {
+                    // Parse the JSON response.
+                    return response.json()
+                }).then((data) => {
+                    console.log(data)
+                    // Return an object in the correct shape.
+                    return {
+                        method: data.method,
+                        url: data.url,
+                        fields: data.fields,
+                    }
+                })
+            }
+        })
+        uppy.on('complete', (result) => {
+            console.log(result)
+            console.log(result.successful[0].name)
+            console.log(result.successful[0].uploadURL)
+            console.log('Upload complete! We’ve uploaded these files:', result.successful)
+        })
+    </script>
+    </body>
+    </html>
+{{ end }}
