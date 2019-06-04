@@ -1,8 +1,8 @@
-const Uppy = require('@uppy/core')
-const Dashboard = require('@uppy/dashboard')
-const AwsS3 = require('@uppy/aws-s3')
+import Uppy from '@uppy/core'
+import Dashboard from '@uppy/dashboard'
+import AwsS3 from '@uppy/aws-s3'
 
-const uppy = Uppy({
+var uppy = Uppy({
     debug: true
 })
 
@@ -11,7 +11,7 @@ uppy.use(Dashboard, {
     target: '#drag-drop-area'
 })
 uppy.use(AwsS3, {
-    getUploadParameters (file) {
+    getUploadParameters(file) {
         return fetch('/sign', {
             method: 'post',
             // Send and receive JSON.

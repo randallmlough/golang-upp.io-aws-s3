@@ -1,17 +1,23 @@
 {
-  "name": "dropzone-s3",
+  "name": "golang-uppy.io-aws-s3",
   "version": "1.0.0",
-  "description": "",
+  "description": "Uppy.io uploader client with a Go backend server sending to Amazon s3",
   "main": "index.js",
   "scripts": {
-    "bundle": "browserify src/main.js -o assets/js/bundle.js"
+    "bundle": "NODE_ENV=production rollup -c"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Randall Lough",
+  "license": "MIT",
   "dependencies": {
+    "@babel/core": "^7.4.5",
     "@uppy/aws-s3": "^1.0.2",
     "@uppy/core": "^1.0.2",
     "@uppy/dashboard": "^1.0.2",
-    "browserify": "^16.2.3"
+    "rollup": "^1.13.1",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^10.0.0",
+    "rollup-plugin-node-resolve": "^5.0.1",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-terser": "^5.0.0"
   }
 }
