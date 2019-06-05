@@ -1,0 +1,21 @@
+{{ define "page"}}
+    <h1>Images</h1>
+        <div style="width: 600px">
+    {{ range . }}
+        <img src="{{.URL}}" alt="" width="600" style="max-width: 100%; height: auto;">
+        <br/>
+        {{ .Path }}
+        <img ci-src="https://a-golang-uploader.s3.amazonaws.com/{{.Path}}" alt="" width="600" style="max-width: 100%; height: auto;">
+        <br/>
+        {{ .Size }}
+        <br/>
+    {{ end }}
+        </div>
+    <script src="https://cdn.scaleflex.it/plugins/js-cloudimage-responsive/2.0.2/js-cloudimage-responsive.min.js"></script>
+    <script>
+        const ciResponsive = new window.CIResponsive({
+            token: 'agdzjqvnen',
+        });
+        ciResponsive.init();
+    </script>
+{{ end }}

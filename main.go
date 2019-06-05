@@ -1,40 +1,31 @@
 package main
 
 import (
-	"dropzone-s3/upload"
-	"html/template"
+	"dropzone-s3/images"
+	"dropzone-s3/views"
 	"log"
 	"net/http"
-	"path/filepath"
 )
 
 func rootHandler(resp http.ResponseWriter, req *http.Request) {
 
-	render(resp, nil)
+	views.Render(resp, "templates/upload.html", nil)
 }
+func formHandler(resp http.ResponseWriter, req *http.Request) {
 
-func render(resp http.ResponseWriter, data interface{}) {
-	t := template.New("")
-	t.Funcs(template.FuncMap{})
-	temps, err := filepath.Glob("layouts/*.html")
-	if err != nil {
-		log.Fatal(err)
-	}
-	tmp, err := t.ParseFiles(temps...)
-	if err != nil {
-		log.Fatal(err)
-	}
-	if err := tmp.ExecuteTemplate(resp, "main", data); err != nil {
-		http.Error(resp, "Something went wrong", http.StatusInternalServerError)
-		return
-	}
+	views.Render(resp, "templates/form.html", nil)
 }
 func main() {
 	fs := http.FileServer(http.Dir("assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
 	http.HandleFunc("/", rootHandler)
-	http.HandleFunc("/sign", upload.PreSignRequest)
+	http.HandleFunc("/form", formHandler)
+	http.HandleFunc("/sign", images.PreSignRequest)
+	http.HandleFunc("/images", images.GetImages)
+	http.HandleFunc("/image", images.GetSignRequest)
+	http.HandleFunc("/delete", images.DeleteImage)
+	http.HandleFunc("/buckets", images.ListBuckets)
 	log.Println("listening on port :3000...")
 	if err := http.ListenAndServe(":3000", nil); err != nil {
 		log.Fatal(err)
